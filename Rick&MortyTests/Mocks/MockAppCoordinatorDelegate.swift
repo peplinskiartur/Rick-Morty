@@ -9,14 +9,15 @@ import Foundation
 @testable import Rick_Morty
 
 final class MockAppCoordinatorDelegate: AppCoordinatorDelegate {
-    private(set) var showCharactersCollectionCalled: Bool = false
-    private(set) var showCharacterDetailsCalled: Bool = false
 
-    func showCharactersCollection() {
-        showCharactersCollectionCalled = true
-    }
+    private(set) var showCharacterDetailsCalled: Bool = false
+    private(set) var dismissCharacterDetailsCalled: Bool = false
 
     func showCharacterDetails(_ character: Rick_Morty.Character) {
         showCharacterDetailsCalled = true
+    }
+
+    func dismissCharacterDetails() {
+        dismissCharacterDetailsCalled = true
     }
 }
