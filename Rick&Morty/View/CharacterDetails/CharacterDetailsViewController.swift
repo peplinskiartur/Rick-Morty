@@ -24,8 +24,16 @@ class CharacterDetailsViewController: UIViewController {
     }()
     private let statusLabel: UILabel = .withoutAutoLayout()
     private let speciesLabel: UILabel = .withoutAutoLayout()
-    private let originLabel: UILabel = .withoutAutoLayout()
-    private let currentLocationLabel: UILabel = .withoutAutoLayout()
+    private let originLabel: UILabel = {
+        let view = UILabel.withoutAutoLayout()
+        view.numberOfLines = 0
+        return view
+    }()
+    private let currentLocationLabel: UILabel = {
+        let view = UILabel.withoutAutoLayout()
+        view.numberOfLines = 0
+        return view
+    }()
 
     private let stackView: UIStackView = {
         let view = UIStackView.withoutAutoLayout()
@@ -33,6 +41,15 @@ class CharacterDetailsViewController: UIViewController {
         view.spacing = Constants.spacing
         view.alignment = .leading
         view.distribution = .equalSpacing
+        view.backgroundColor = .black
+        view.layoutMargins = .init(
+            top: Constants.margin,
+            left: Constants.margin,
+            bottom: Constants.margin,
+            right: Constants.margin
+        )
+        view.isLayoutMarginsRelativeArrangement = true
+        view.layer.cornerRadius = 10.0
         return view
     }()
 
@@ -87,7 +104,10 @@ class CharacterDetailsViewController: UIViewController {
             speciesLabel,
             originLabel,
             currentLocationLabel
-        ].forEach(stackView.addArrangedSubview)
+        ].forEach {
+            self.stackView.addArrangedSubview($0)
+            $0.textColor = .white
+        }
     }
 
     private func setUpBindings() {
