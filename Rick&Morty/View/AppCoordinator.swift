@@ -9,6 +9,7 @@ import UIKit
 
 protocol AppCoordinatorDelegate: AnyObject {
     func showCharacterDetails(_ character: Character)
+    func dismissCharacterDetails()
 }
 
 class AppCoordinator: NSObject, AppCoordinatorDelegate {
@@ -40,10 +41,15 @@ class AppCoordinator: NSObject, AppCoordinatorDelegate {
             imageService: imageService,
             character: character
         )
+        viewModel.coordinator = self
         let viewController = CharacterDetailsViewController(viewModel: viewModel)
         viewController.transitioningDelegate = self
         viewController.modalPresentationStyle = .custom
         rootViewController.viewControllers.last?.present(viewController, animated: true)
+    }
+
+    func dismissCharacterDetails() {
+        rootViewController.dismiss(animated: true)
     }
 }
 

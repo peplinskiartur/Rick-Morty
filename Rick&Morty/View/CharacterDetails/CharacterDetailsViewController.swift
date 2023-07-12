@@ -15,13 +15,6 @@ class CharacterDetailsViewController: UIViewController {
         static var spacing: CGFloat = 8.0
     }
 
-    private let closeButton: UIButton = {
-        let view = UIButton(type: .system).withoutAutoLayout()
-        view.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        view.tintColor = .white
-        return view
-    }()
-
     private let imageView: UIImageView = .withoutAutoLayout()
     private let nameLabel: UILabel = {
         let view = UILabel.withoutAutoLayout()
@@ -44,6 +37,9 @@ class CharacterDetailsViewController: UIViewController {
     }()
 
     private let viewModel: CharacterDetailsViewModel
+
+    private var viewTranslation = CGPoint(x: 0, y: 0)
+    private var dismissTreshold: CGFloat = 200.0
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -95,8 +91,6 @@ class CharacterDetailsViewController: UIViewController {
     }
 
     private func setUpBindings() {
-        closeButton.addTarget(self, action: #selector(didPressCloseButton), for: .touchUpInside)
-
         viewModel.$image
             .sink { [weak self] in self?.imageView.image = $0 }
             .store(in: &cancellables)
@@ -106,10 +100,44 @@ class CharacterDetailsViewController: UIViewController {
         speciesLabel.text = "Species: " + viewModel.species
         originLabel.text = "Origin: " + viewModel.origin
         currentLocationLabel.text = "Current location: " + viewModel.currentLocation
+
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismiss)))
     }
 
-    @objc private func didPressCloseButton() {
-        dismiss(animated: true)
+    @objc private func handleDismiss(sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .changed:
+            viewTranslation = sender.translation(in: view)
+            UIView.animate(
+                withDuration: 0.35,
+                delay: 0,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 1,
+                options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                animations: {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: max(0, self.viewTranslation.y))
+                }
+            )
+
+        case .ended:
+            if viewTranslation.y < dismissTreshold {
+                UIView.animate(
+                    withDuration: 0.35,
+                    delay: 0,
+                    usingSpringWithDamping: 0.7,
+                    initialSpringVelocity: 1,
+                    options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                    animations: {
+                        self.view.transform = .identity
+                    }
+                )
+            } else {
+                viewModel.didScrollToDismiss()
+            }
+
+        default:
+            break
+        }
     }
 }
 
