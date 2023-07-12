@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "7AD09844-2A5E-4F0C-A97A-6E89E22EFE9B"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C4E69C44-0571-4C94-B2AD-30170326EEBF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Rick&amp;Morty/View/CharactersCollection/Cells/CharacterImageViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "willDisplayCell()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C4E69C44-0571-4C94-B2AD-30170326EEBF - 2673008ab04bb982"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Rick_Morty.CharacterImageViewModel.willDisplayCell() -&gt; ()"
+                  moduleName = "Rick&amp;Morty"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arturpeplinski/Development/Mobile/iOS/Rick&amp;Morty/Rick&amp;Morty/View/CharactersCollection/Cells/CharacterImageViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "140">
+               </Location>
+               <Location
+                  uuid = "C4E69C44-0571-4C94-B2AD-30170326EEBF - 61bc4d62d8eaf984"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Rick_Morty.CharacterImageViewModel.willDisplayCell() -&gt; ()"
+                  moduleName = "Rick&amp;Morty"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arturpeplinski/Development/Mobile/iOS/Rick&amp;Morty/Rick&amp;Morty/View/CharactersCollection/Cells/CharacterImageViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "148">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2BF15ADE-0042-496B-ADE7-1C7674B28E06"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Rick&amp;Morty/View/CharactersCollection/Cells/CharacterImageViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "prepareForReuse()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
