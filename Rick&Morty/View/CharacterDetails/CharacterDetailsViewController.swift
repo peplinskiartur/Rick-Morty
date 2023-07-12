@@ -43,8 +43,6 @@ class CharacterDetailsViewController: UIViewController {
         return view
     }()
 
-    private let gradientView: GradientView = .withoutAutoLayout()
-
     private let viewModel: CharacterDetailsViewModel
 
     private var cancellables: Set<AnyCancellable> = []
@@ -77,26 +75,6 @@ class CharacterDetailsViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0)
-        ])
-
-        view.addSubview(gradientView)
-        NSLayoutConstraint.activate([
-            gradientView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            gradientView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
-            gradientView.heightAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 0.5)
-        ])
-
-        gradientView.startLocation = 0.1
-        gradientView.endLocation = 0.95
-        gradientView.startColor = .clear
-        gradientView.endColor = .white
-
-        view.addSubview(closeButton)
-        NSLayoutConstraint.activate([
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.margin),
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.margin),
-            closeButton.heightAnchor.constraint(equalTo: closeButton.widthAnchor, multiplier: 1.0)
         ])
 
         view.addSubview(stackView)
