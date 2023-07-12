@@ -15,13 +15,6 @@ class CharacterDetailsViewController: UIViewController {
         static var spacing: CGFloat = 8.0
     }
 
-    private let closeButton: UIButton = {
-        let view = UIButton(type: .system).withoutAutoLayout()
-        view.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        view.tintColor = .white
-        return view
-    }()
-
     private let imageView: UIImageView = .withoutAutoLayout()
     private let nameLabel: UILabel = {
         let view = UILabel.withoutAutoLayout()
@@ -31,8 +24,16 @@ class CharacterDetailsViewController: UIViewController {
     }()
     private let statusLabel: UILabel = .withoutAutoLayout()
     private let speciesLabel: UILabel = .withoutAutoLayout()
-    private let originLabel: UILabel = .withoutAutoLayout()
-    private let currentLocationLabel: UILabel = .withoutAutoLayout()
+    private let originLabel: UILabel = {
+        let view = UILabel.withoutAutoLayout()
+        view.numberOfLines = 0
+        return view
+    }()
+    private let currentLocationLabel: UILabel = {
+        let view = UILabel.withoutAutoLayout()
+        view.numberOfLines = 0
+        return view
+    }()
 
     private let stackView: UIStackView = {
         let view = UIStackView.withoutAutoLayout()
@@ -40,12 +41,22 @@ class CharacterDetailsViewController: UIViewController {
         view.spacing = Constants.spacing
         view.alignment = .leading
         view.distribution = .equalSpacing
+        view.backgroundColor = .black
+        view.layoutMargins = .init(
+            top: Constants.margin,
+            left: Constants.margin,
+            bottom: Constants.margin,
+            right: Constants.margin
+        )
+        view.isLayoutMarginsRelativeArrangement = true
+        view.layer.cornerRadius = 10.0
         return view
     }()
 
-    private let gradientView: GradientView = .withoutAutoLayout()
-
     private let viewModel: CharacterDetailsViewModel
+
+    private var viewTranslation = CGPoint(x: 0, y: 0)
+    private var dismissTreshold: CGFloat = 200.0
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -79,26 +90,6 @@ class CharacterDetailsViewController: UIViewController {
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0)
         ])
 
-        view.addSubview(gradientView)
-        NSLayoutConstraint.activate([
-            gradientView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            gradientView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
-            gradientView.heightAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 0.5)
-        ])
-
-        gradientView.startLocation = 0.1
-        gradientView.endLocation = 0.95
-        gradientView.startColor = .clear
-        gradientView.endColor = .white
-
-        view.addSubview(closeButton)
-        NSLayoutConstraint.activate([
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.margin),
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.margin),
-            closeButton.heightAnchor.constraint(equalTo: closeButton.widthAnchor, multiplier: 1.0)
-        ])
-
         view.addSubview(stackView)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.margin),
@@ -113,12 +104,13 @@ class CharacterDetailsViewController: UIViewController {
             speciesLabel,
             originLabel,
             currentLocationLabel
-        ].forEach(stackView.addArrangedSubview)
+        ].forEach {
+            self.stackView.addArrangedSubview($0)
+            $0.textColor = .white
+        }
     }
 
     private func setUpBindings() {
-        closeButton.addTarget(self, action: #selector(didPressCloseButton), for: .touchUpInside)
-
         viewModel.$image
             .sink { [weak self] in self?.imageView.image = $0 }
             .store(in: &cancellables)
@@ -128,10 +120,44 @@ class CharacterDetailsViewController: UIViewController {
         speciesLabel.text = "Species: " + viewModel.species
         originLabel.text = "Origin: " + viewModel.origin
         currentLocationLabel.text = "Current location: " + viewModel.currentLocation
+
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismiss)))
     }
 
-    @objc private func didPressCloseButton() {
-        dismiss(animated: true)
+    @objc private func handleDismiss(sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .changed:
+            viewTranslation = sender.translation(in: view)
+            UIView.animate(
+                withDuration: 0.35,
+                delay: 0,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 1,
+                options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                animations: {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: max(0, self.viewTranslation.y))
+                }
+            )
+
+        case .ended:
+            if viewTranslation.y < dismissTreshold {
+                UIView.animate(
+                    withDuration: 0.35,
+                    delay: 0,
+                    usingSpringWithDamping: 0.7,
+                    initialSpringVelocity: 1,
+                    options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                    animations: {
+                        self.view.transform = .identity
+                    }
+                )
+            } else {
+                viewModel.didScrollToDismiss()
+            }
+
+        default:
+            break
+        }
     }
 }
 

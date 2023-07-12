@@ -10,15 +10,18 @@ import XCTest
 
 final class CharacterDetailsViewModelTests: XCTestCase {
 
+    private var mockAppCoordinatorDelegate: MockAppCoordinatorDelegate!
     private var mockImageService: MockImageService!
     private var sut: CharacterDetailsViewModel!
 
     override func setUpWithError() throws {
+        mockAppCoordinatorDelegate = MockAppCoordinatorDelegate()
         mockImageService = MockImageService()
         sut = CharacterDetailsViewModel(
             imageService: mockImageService,
             character: .mock
         )
+        sut.coordinator = mockAppCoordinatorDelegate
     }
 
     func test_viewModel_callViewDidLoad() {
@@ -44,5 +47,15 @@ final class CharacterDetailsViewModelTests: XCTestCase {
 
         // Then
         XCTAssertEqual(image, sut.image)
+    }
+
+    func test_viewModel_callDidScrollToDismiss_coordinatorCalled() {
+        // Given
+
+        // When
+        sut.didScrollToDismiss()
+
+        // Then
+        XCTAssertTrue(mockAppCoordinatorDelegate.dismissCharacterDetailsCalled)
     }
 }

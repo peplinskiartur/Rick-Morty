@@ -14,6 +14,8 @@ class CharacterDetailsViewModel {
     private let character: Character
     @Published private(set) var image: UIImage?
 
+    weak var coordinator: AppCoordinatorDelegate?
+
     var name: String { character.name }
     var status: String { character.status.string }
     var species: String { character.species }
@@ -38,5 +40,9 @@ class CharacterDetailsViewModel {
                 self.image = image
             }
         }
+    }
+
+    func didScrollToDismiss() {
+        coordinator?.dismissCharacterDetails()
     }
 }
