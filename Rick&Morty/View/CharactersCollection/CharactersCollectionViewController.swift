@@ -142,7 +142,7 @@ class CharactersCollectionViewController: UIViewController {
                     self?.noResultsLabel.isHidden = true
 
                 case .failure:
-                    break // TODO: handle error
+                    break // TODO: add support of handling network oriented errors
 
                 case .noResults:
                     self?.noResultsLabel.isHidden = false
