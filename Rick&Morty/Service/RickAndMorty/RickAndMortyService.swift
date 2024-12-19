@@ -15,7 +15,10 @@ protocol RickAndMortyServiceProtocol {
 class RickAndMortyService: RickAndMortyServiceProtocol {
 
     private let baseURLString: String = "rickandmortyapi.com"
-    private let path: String = "/api/character"
+
+    private enum Endpoints: String {
+        case character = "/api/character"
+    }
 
     private let apiClient: APIClientProtocol
 
@@ -46,7 +49,7 @@ class RickAndMortyService: RickAndMortyServiceProtocol {
         ].filter { !$0.value.isEmpty }
         let response: RickAndMortyPageResponse<[Character]> = try await apiClient.request(
             baseURLString: baseURLString,
-            path: path,
+            path: Endpoints.character.rawValue,
             parameters: parameters
         )
         return (response.results, response.info.nextURL != nil)
